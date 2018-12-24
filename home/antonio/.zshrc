@@ -5,6 +5,8 @@ PYVENVS="/home/antonio/dev/pyvenvs/"
 # Path to your oh-my-zsh installation.
   export ZSH="/home/antonio/.oh-my-zsh"
 
+DEFAULT_USER=antonio
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
