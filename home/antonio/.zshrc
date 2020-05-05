@@ -1,17 +1,120 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-PYVENVS="/home/antonio/dev/pyvenvs/"
-
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/antonio/.oh-my-zsh"
+export ZSH="/home/antonio/.oh-my-zsh"
 
 DEFAULT_USER=antonio
+
+ZSH_THEME="agnoster"
+
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+)
+
+source $ZSH/oh-my-zsh.sh
+
+### RUBY STUFF mainly for jekyll
+export GEM_HOME="/home/antonio/dev/ruby/gems"
+export PATH="$GEM_HOME/bin:$PATH"
+
+### DEV TOOLS
+DEV_DIR="/home/antonio/dev"
+OPENCV_IDIR="$DEV_DIR/opencv4_1_1/include/opencv4"
+OPENCV_LDIR="$DEV_DIR/opencv4_1_1/lib"
+
+
+#add DEV_DIR to default include search directories for gcc and g++
+export CPATH="$DEV_DIR/:$CPATH"
+export CPATH="$OPENCV_IDIR/:$CPATH"
+export CPATH="$OPENCV_LDIR/:$CPATH"
+export LD_LIBRARY_PATH="$OPENCV_LDIR/:$LD_LIBRARY_PATH"
+
+
+#python virtual envs aliases
+PYTHON_VENV_DIR="$DEV_DIR""pyvenvs/"
+
+function newvenv(){
+    virtualenv --no-site-packages "$PYTHON_VENV_DIR""$1"
+}
+
+function newvenvpy3(){
+    virtualenv --no-site-packages --python=python3.6 "$PYTHON_VENV_DIR""$1"
+}
+
+alias venvs="ls $PYTHON_VENV_DIR"
+
+function runvenv () {
+	source "$PYTHON_VENV_DIR""$1"/bin/activate
+}
+
+alias stopvenv="deactivate"
+
+function dfltpy(){
+	startvenv default
+	ipython
+}
+
+#lint python code ignoring useless error-reporting - MUST BE IN A VENV WITH FLAKE8 INSTALLED
+alias lint="python /home/antonio/Dropbox/projects/simplescripts/lint.py -p "
+
+### END DEV TOOLS
+
+
+### VPN TOOLS
+
+#list vpns of a type (TCP vs UDP) from a location
+function vpns () {
+    ls -la "/etc/openvpn/ovpn_""$1" | grep "$2"
+}
+
+alias vpnst="vpns tcp "
+alias vpnsu="vpns udp "
+
+#connect to vpn server of a type, TCP or UDP
+alias vpndnst="/home/antonio/Dropbox/projects/simplescripts/vpndns tcp "
+alias vpndnsu="/home/antonio/Dropbox/projects/simplescripts/vpndns udp "
+### END VPN TOOLS
+
+### ZSH TOOLS
+
+#open this file with nano and save a copy in dropbox
+function zshconf () {
+    gedit ~/.zshrc
+    cp ~/.zshrc ~/Dropbox/projects/simplescripts
+}
+
+#source this file
+alias re-source="source ~/.zshrc"
+
+### END ZSH TOOLS
+
+### MISC TOOLS
+alias projects="cd ~/Dropbox/projects"
+
+
+
+
+
+
+
+
+
+
+
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+#PYVENVS="/home/antonio/dev/pyvenvs/"
+
+
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="agnoster"
+
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -60,16 +163,7 @@ ZSH_THEME="agnoster"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-)
 
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -99,19 +193,5 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias zshconf="nano ~/.zshrc"
-alias re-source="source ~/.zshrc"
-
-alias projects="cd ~/Dropbox/projects"
-
-alias vpnst="/home/antonio/Dropbox/projects/simplescripts/vpns tcp "
-alias vpnsu="/home/antonio/Dropbox/projects/simplescripts/vpns udp "
-
-alias vpndnst="/home/antonio/Dropbox/projects/simplescripts/vpndns tcp "
-alias vpndnsu="/home/antonio/Dropbox/projects/simplescripts/vpndns udp "
 
 
-function startvenv () {
-	source "$PYVENVS""$1"/bin/activate
-}
-alias stopvenv="deactivate"
